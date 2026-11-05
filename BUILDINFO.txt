@@ -1,0 +1,25 @@
+FFmpeg 8.1.3 for Usher (SD channels), built 2026-11-05T14:11Z by scripts/ffmpeg/build-xcframework.sh
+source: https://ffmpeg.org/releases/ffmpeg-8.1.3.tar.xz
+tarball sha256: 7138d28c96d9d3e3af4ee3d8cad72741f8ffb40da90c1112235dea3ecd3178a3
+[GNUPG:] GOODSIG B4322F04D67658D8 FFmpeg release signing key <ffmpeg-devel@ffmpeg.org>
+[GNUPG:] VALIDSIG FCF986EA15E6E293A5644F10B4322F04D67658D8 2026-09-21 1789951930 0 4 0 1 10 00 FCF986EA15E6E293A5644F10B
+configure (every slice; plus --prefix, --cc, --sysroot and -target for the slice): --disable-everything --enable-decoder=mpeg2video,mp2,mp2float --enable-parser=mpegvideo,mpegaudio --disable-gpl --disable-nonfree --disable-version3 --enable-shared --disable-static --enable-pic --disable-programs --disable-doc --disable-network --disable-autodetect --disable-debug --disable-avformat --disable-avfilter --disable-avdevice --disable-swscale --disable-swresample --enable-cross-compile --target-os=darwin --arch=aarch64 --install-name-dir=@rpath
+slices: tvos tvos-sim ios ios-sim
+  tvos: arm64-apple-tvos18.0 (SDK 27.2)
+  tvos-sim: arm64-apple-tvos18.0-simulator (SDK 27.2)
+  ios: arm64-apple-ios18.0 (SDK 27.2)
+  ios-sim: arm64-apple-ios18.0-simulator (SDK 27.2)
+toolchain: Xcode 27.2 Build version 27B52 
+#define CONFIG_GPL 0
+#define CONFIG_NONFREE 0
+#define CONFIG_VERSION3 0
+licence (configure): License: LGPL version 2.1 or later
+sizes (bytes, stripped binary per slice):
+  tvos      libavutil      719184
+  tvos      libavcodec     559984
+  tvos-sim  libavutil      714944
+  tvos-sim  libavcodec     573088
+  ios       libavutil      714992
+  ios       libavcodec     556720
+  ios-sim   libavutil      714944
+  ios-sim   libavcodec     573088
