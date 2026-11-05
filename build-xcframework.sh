@@ -151,7 +151,6 @@ framework() {   # $1 slice, $2 lib (avutil | avcodec) -> $BUILD/fw/$1/lib$2.fram
     [ -n "$old" ] && install_name_tool -change "$old" "@rpath/libavutil.framework/libavutil" "$fw/lib$lib" 2>/dev/null
   fi
   xcrun strip -x -S "$fw/lib$lib" 2>/dev/null   # (local and debug symbols out; FFmpeg's API stays exported)
-  codesign -f -s - "$fw/lib$lib" 2>/dev/null     # (ad hoc again after the edits; Xcode signs it properly when it embeds it)
   cp -R "$inst/include/lib$lib/." "$fw/Headers/"
   cat > "$fw/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
@@ -169,6 +168,11 @@ framework() {   # $1 slice, $2 lib (avutil | avcodec) -> $BUILD/fw/$1/lib$2.fram
   <key>MinimumOSVersion</key><string>$MIN_OS</string>
 </dict></plist>
 PLIST
+  # Signed ad hoc as a bundle, with its bundle id as the signing identifier: Xcode keeps the identifier when it signs
+  # the framework into the app, and a device refuses an app whose framework's identifier isn't its bundle id
+  # ("MismatchedBundleIDSigningIdentifier", the Cinema, 5 Nov; the simulator doesn't check).
+  codesign -f -s - -i "com.custardcat.usher.ffmpeg.lib$lib" "$fw" 2>/dev/null || die "$s lib$lib: codesign"
+  codesign -dv "$fw" 2>&1 | grep -qx "Identifier=com.custardcat.usher.ffmpeg.lib$lib" || die "$s lib$lib: signing identifier"
   # Checks: arm64, the right platform, the right install name, and nothing it loads but the system and libavutil.
   lipo -archs "$fw/lib$lib" | grep -qx arm64 || die "$s lib$lib: not arm64"
   otool -D "$fw/lib$lib" | tail -1 | grep -qx "@rpath/lib$lib.framework/lib$lib" || die "$s lib$lib: install name"
